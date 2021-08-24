@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework import permissions
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 from .serializers import PollSerializer, QuestionSerializer, VoteSerializer
@@ -23,6 +24,8 @@ class QuestionViewSet(viewsets.ModelViewSet):
 class VoteViewSet(viewsets.ModelViewSet):
     queryset = Vote.objects.all()
     serializer_class = VoteSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['user']
 
     def perform_create(self, serializer):
         if self.request.user.is_authenticated:
