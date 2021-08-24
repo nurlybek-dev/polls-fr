@@ -1,6 +1,5 @@
-from django.conf import settings
 from django.db import models
-from django.utils.timezone import datetime
+from django.utils.timezone import now
 
 
 class Poll(models.Model):
@@ -43,8 +42,8 @@ class Choice(models.Model):
 
 class Vote(models.Model):
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
-    date = models.DateField(default=datetime.now().date, editable=False)
+    user = models.IntegerField()
+    date = models.DateField(default=now, editable=False)
 
 
 class Answer(models.Model):
