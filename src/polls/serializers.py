@@ -1,8 +1,20 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.timezone import datetime
 from rest_framework import serializers
 from rest_framework.relations import PrimaryKeyRelatedField
 
 from .models import Poll, Question, Choice, Vote, Answer
+
+
+class IDField(PrimaryKeyRelatedField):
+    def to_internal_value(self, data):
+        try:
+            value = self.get_queryset().get(pk=data)
+            return value.id
+        except ObjectDoesNotExist:
+            self.fail('does_not_exist', pk_value=data)
+        except (TypeError, ValueError):
+            self.fail('incorrect_type', data_type=type(data).__name__)
 
 
 class ChoiceSerializer(serializers.ModelSerializer):
@@ -67,10 +79,10 @@ class PollSerializer(serializers.ModelSerializer):
 
 class AnswerSerializer(serializers.ModelSerializer):
     choice = ChoiceSerializer(read_only=True)
-    choice_id = PrimaryKeyRelatedField(queryset=Choice.objects.all(), write_only=True)
+    choice_id = IDField(queryset=Choice.objects.all(), write_only=True)
 
     question = QuestionSerializer(read_only=True)
-    question_id = PrimaryKeyRelatedField(queryset=Question.objects.all(), write_only=True)
+    question_id = IDField(queryset=Question.objects.all(), write_only=True)
 
     class Meta:
         model = Answer
@@ -81,7 +93,7 @@ class AnswerSerializer(serializers.ModelSerializer):
 class VoteSerializer(serializers.ModelSerializer):
     answers = AnswerSerializer(many=True)
     poll = PollSerializer(read_only=True)
-    poll_id = PrimaryKeyRelatedField(
+    poll_id = IDField(
         queryset=Poll.objects.filter(end_date__gte=datetime.now()),
         write_only=True
     )
