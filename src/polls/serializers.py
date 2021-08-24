@@ -1,5 +1,6 @@
-from django.db.models import fields
+from django.utils.timezone import datetime
 from rest_framework import serializers
+from rest_framework.relations import PrimaryKeyRelatedField
 
 from .models import Poll, Question, Choice, Vote, Answer
 
@@ -19,7 +20,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'poll', 'text', 'type', 'choices')
+        fields = ('id','text', 'type', 'choices')
         read_only_fields = ('id', )
     
     def create_choices(self, question, choices):
@@ -66,21 +67,28 @@ class PollSerializer(serializers.ModelSerializer):
 
 class AnswerSerializer(serializers.ModelSerializer):
     choice = ChoiceSerializer(read_only=True)
+    choice_id = PrimaryKeyRelatedField(queryset=Choice.objects.all(), write_only=True)
+
     question = QuestionSerializer(read_only=True)
+    question_id = PrimaryKeyRelatedField(queryset=Question.objects.all(), write_only=True)
 
     class Meta:
         model = Answer
-        fields = ('id', 'question', 'choice', 'value')
+        fields = ('id', 'question', 'question_id', 'choice', 'choice_id', 'value')
         read_only_fields = ('id', )
 
 
 class VoteSerializer(serializers.ModelSerializer):
     answers = AnswerSerializer(many=True)
     poll = PollSerializer(read_only=True)
+    poll_id = PrimaryKeyRelatedField(
+        queryset=Poll.objects.filter(end_date__gte=datetime.now()),
+        write_only=True
+    )
 
     class Meta:
         model = Vote
-        fields = ('id', 'poll', 'user', 'date', 'answers')
+        fields = ('id', 'poll_id', 'poll', 'user', 'date', 'answers')
         read_only_fields = ('id', 'user', 'date')
 
     def create(self, validated_data):

@@ -1,4 +1,4 @@
-import datetime
+from django.utils.timezone import datetime
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 
@@ -8,7 +8,7 @@ class PollPermission(BasePermission):
             return True
         
         view.queryset = view.queryset.filter(
-            end_date__gte=datetime.date.today()
+            end_date__gte=datetime.now()
         )
         if request.method.upper() in SAFE_METHODS:
             return True
