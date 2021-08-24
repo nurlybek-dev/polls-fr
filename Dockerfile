@@ -1,10 +1,14 @@
 FROM python:3-alpine
 
-WORKDIR /code
-
-COPY requirements.txt requirements.txt
-RUN python -m pip install -r requirements.txt
-
 COPY . .
 
-CMD sh docker-entrypoint.sh
+WORKDIR /code
+
+RUN pip install pipenv && pipenv install
+
+WORKDIR /src
+
+RUN pipenv run python manage.py migrate --noinput
+RUN pipenv run python manage.py loaddata data.json
+
+CMD RUN pipenv run python manage.py runserver 0.0.0.0:8000
