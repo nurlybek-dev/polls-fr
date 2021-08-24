@@ -32,7 +32,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id','text', 'type', 'choices')
+        fields = ('id','poll', 'text', 'type', 'choices')
         read_only_fields = ('id', )
     
     def create_choices(self, question, choices):
@@ -94,14 +94,14 @@ class VoteSerializer(serializers.ModelSerializer):
     answers = AnswerSerializer(many=True)
     poll = PollSerializer(read_only=True)
     poll_id = IDField(
-        queryset=Poll.objects.filter(end_date__gte=datetime.now()),
+        queryset=Poll.objects.filter(end_date__gte=datetime.today()),
         write_only=True
     )
 
     class Meta:
         model = Vote
         fields = ('id', 'poll_id', 'poll', 'user', 'date', 'answers')
-        read_only_fields = ('id', 'user', 'date')
+        read_only_fields = ('id', 'date')
 
     def create(self, validated_data):
         answers = validated_data.pop('answers', [])

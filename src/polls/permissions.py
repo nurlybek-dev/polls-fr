@@ -8,7 +8,7 @@ class PollPermission(BasePermission):
             return True
         
         view.queryset = view.queryset.filter(
-            end_date__gte=datetime.now()
+            end_date__gte=datetime.today()
         )
         if request.method.upper() in SAFE_METHODS:
             return True

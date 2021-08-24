@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.timezone import now
+from django.utils.timezone import datetime
 
 
 class Poll(models.Model):
@@ -14,23 +14,21 @@ class Question(models.Model):
         """
         Описывает типы вопроса
         """
-        TEXT = 'TEXT'
-        CHOICE = 'CHOICE'
-        MULTICHOICE = 'MULTICHOICE'
+        TEXT = 1
+        CHOICE = 2
+        MULTICHOICE = 3
 
         choices = (
-            (TEXT, 'TEXT'),
-            (CHOICE, 'CHOICE'),
-            (MULTICHOICE, 'MULTICHOICE'),
+            (TEXT, 'Текст'),
+            (CHOICE, 'Выбор'),
+            (MULTICHOICE, 'Множественный выбор'),
         )
 
     poll = models.ForeignKey(
         Poll, related_name='questions', on_delete=models.CASCADE
     )
     text = models.CharField(max_length=256)
-    type = models.CharField(
-        max_length=11, choices=Type.choices, default=Type.TEXT
-    )
+    type = models.SmallIntegerField(choices=Type.choices, default=Type.TEXT)
 
 
 class Choice(models.Model):
@@ -43,7 +41,7 @@ class Choice(models.Model):
 class Vote(models.Model):
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     user = models.IntegerField()
-    date = models.DateField(default=now, editable=False)
+    date = models.DateField(default=datetime.today, editable=False)
 
 
 class Answer(models.Model):
