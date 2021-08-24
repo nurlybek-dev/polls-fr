@@ -44,7 +44,7 @@ class Choice(models.Model):
 class Vote(models.Model):
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
-    date = models.DateField(default=datetime.now(), editable=False)
+    date = models.DateField(default=datetime.now().date, editable=False)
 
 
 class Answer(models.Model):
