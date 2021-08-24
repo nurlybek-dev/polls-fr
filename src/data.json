@@ -1,0 +1,103 @@
+[
+{
+    "model": "auth.User",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$150000$5M5wVtM7K5oP$fh4MyfAB8AbTDWOMcHZ0EFWcFhyJqRK8o2BvZb+rQI8=",
+        "last_login": null,
+        "is_superuser": true,
+        "username": "admin",
+        "is_staff": true,
+        "is_active": true
+    }
+},
+{
+    "model": "auth.User",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$150000$ue3t3oFXppLx$5QKjsY9NhyoFXgN7LspyCVKFlSjkZ8jIyOmD4WeATf0=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "testuser",
+        "is_staff": false,
+        "is_active": true
+    }
+},
+{
+    "model": "polls.Poll",
+    "pk": 1,
+    "fields": {
+        "title": "Демонстрационный опрос",
+        "start_date": "2021-08-24",
+        "end_date": "2022-08-24",
+        "description": "Опрос создан что бы ознакомиться с возможностьями сервиса."
+    }
+},
+{
+    "model": "polls.Question",
+    "pk": 1,
+    "fields": {
+        "poll": 1,
+        "text": "Можно писать ответ в текстовом формате.",
+        "type": 1
+    }
+},
+{
+    "model": "polls.Question",
+    "pk": 2,
+    "fields": {
+        "poll": 1,
+        "text": "Так же можно сделать выбор ответа",
+        "type": 2
+    }
+},
+{
+    "model": "polls.Question",
+    "pk": 3,
+    "fields": {
+        "poll": 1,
+        "text": "Если не хватает одного выбора, можно сделать мультивыборку",
+        "type": 3
+    }
+},
+{
+    "model": "polls.Choice",
+    "pk": 1,
+    "fields": {
+        "question": 1,
+        "text": "Текстовый ответ"
+    }
+},
+{
+    "model": "polls.Choice",
+    "pk": 2,
+    "fields": {
+        "question": 2,
+        "text": "Вариант выбора 1"
+    }
+},
+{
+    "model": "polls.Choice",
+    "pk": 3,
+    "fields": {
+        "question": 2,
+        "text": "Вариант выбора 2"
+    }
+},
+{
+    "model": "polls.Choice",
+    "pk": 4,
+    "fields": {
+        "question": 3,
+        "text": "Можно выбрать этот"
+    }
+},
+{
+    "model": "polls.Choice",
+    "pk": 5,
+    "fields": {
+        "question": 3,
+        "text": "И этот"
+    }
+}
+]
