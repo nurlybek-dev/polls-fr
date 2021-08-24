@@ -1,4 +1,3 @@
-set -e
 cd src
 python manage.py makemigrations
 python manage.py migrate --noinput
